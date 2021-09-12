@@ -25,12 +25,16 @@ async def on_member_join(member):
 	# sends welcome message when new member joins and asasigns them member role by default
 	role = get(member.guild.roles, name='Member')
 	await member.add_roles(role)
-	await client.get_channel(884492043483754507).send(f"Welcome, <@{member.id}>!!🤩")
+	channel = discord.utils.get(member.guild.channels, name="welcome")
+	channel_id = channel.id
+	await client.get_channel(channel_id).send(f"Welcome, <@{member.id}>!!🤩")
 
 @client.event
 async def on_member_remove(member):
 	# sends bbye message when a member leaves
-	await client.get_channel(884492825373339668).send(f"Bbye, <@{member.id}>😞")
+	channel = discord.utils.get(member.guild.channels, name="cya")
+	channel_id = channel.id
+	await client.get_channel(channel_id).send(f"Bbye, <@{member.id}>😞")
 
 @client.event
 async def on_command_error(ctx, error):
