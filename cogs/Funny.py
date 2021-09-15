@@ -1,8 +1,9 @@
 import discord
 from discord.ext import commands
-from jokeapi import Jokes
 import random
 import asyncio
+import requests
+import json
 
 class Funny(commands.Cog):
 	def __init__(self, client):
@@ -178,7 +179,7 @@ class Funny(commands.Cog):
 	@commands.command(brief = "A random joke to lighten up the room😛")
 	async def joke(self, ctx):
 		# gets a joke
-		joke = Jokes().get_joke()
+		joke = self.get_joke()
 		# just send joke if its of one line
 		if joke["type"] == "single": 
 			await ctx.send(joke["joke"])
@@ -187,6 +188,11 @@ class Funny(commands.Cog):
 			abc = await ctx.send(joke["setup"])
 			await asyncio.sleep(5)
 			await abc.reply(joke["delivery"])
+
+	def get_joke(self):
+		raw = requests.get("https://v2.jokeapi.dev/joke/Any")
+		data = json.loads(raw.text)
+		return data
 
 def setup(client):
 	# initialize cog
